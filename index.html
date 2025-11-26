@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Sabor del Hogar — Prototipo Menú</title>
+<!-- Fuentes -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #FAF3E0;
+    --card: #fff;
+    --accent: #D35400;
+    --accent-dark: #B64500;
+    --muted: #A1887F;
+    --text: #4E342E;
+    --danger: #C0392B;
+    --shadow: 0 6px 18px rgba(78,52,46,0.08);
+    --radius: 10px;
+    --gap: 16px;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background:var(--bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.4;
+  }
+
+  .container{
+    max-width:1100px;
+    margin:28px auto;
+    padding: 20px;
+  }
+
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    margin-bottom:18px;
+  }
+  .logo{
+    display:flex;
+    gap:12px;
+    align-items:center;
+  }
+  .logo .badge{
+    width:56px;
+    height:56px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#c96a20,#d96b1f);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-weight:700;
+    box-shadow:var(--shadow);
+    font-family:"Playfair Display",serif;
+    font-size:18px;
+  }
+  .brand{
+    display:flex;
+    flex-direction:column;
+    line-height:1;
+  }
+  .brand .name{font-family:"Playfair Display",serif; font-size:18px; font-weight:700;}
+  .brand .tag{font-size:12px; color:var(--muted);}
+
+  .cta{
+    display:flex;
+    gap:12px;
+    align-items:center;
+  }
+  .btn{
+    background:var(--accent);
+    color:white;
+    border:0;
+    padding:10px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+    box-shadow: 0 6px 12px rgba(211,84,0,0.12);
+  }
+  .btn.secondary{
+    background:transparent;
+    color:var(--text);
+    border:1px solid rgba(78,52,46,0.06);
+    box-shadow:none;
+  }
+
+  .hero{
+    background: linear-gradient(180deg, rgba(0,0,0,0.02), transparent);
+    padding:20px;
+    border-radius:14px;
+    display:flex;
+    gap:20px;
+    align-items:center;
+    margin-bottom:22px;
+  }
+  .hero-left{
+    flex:1;
+  }
+  .hero h1{
+    margin:0 0 8px 0;
+    font-family:"Playfair Display",serif;
+    font-size:28px;
+  }
+  .hero p{ margin:0 0 12px 0; color:var(--muted) }
+  .hero .cta-large{ padding:12px 18px; font-size:16px; border-radius:12px }
+
+  .hero-img{
+    width:220px;
+    height:140px;
+    border-radius:12px;
+    overflow:hidden;
+    flex-shrink:0;
+  }
+  .hero-img img{ width:100%; height:100%; object-fit:cover; display:block }
+
+  .menu-grid{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--gap);
+  }
+
+  .card{
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:12px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+  }
+  .thumb{
+    width:100px;
+    height:100px;
+    border-radius:10px;
+    overflow:hidden;
+    flex-shrink:0;
+  }
+  .thumb img{ width:100%; height:100%; object-fit:cover; display:block }
+
+  .info{ flex:1 }
+  .info h3{
+    margin:0;
+    font-size:16px;
+    color:var(--text);
+    font-weight:600;
+    font-family:"Playfair Display",serif;
+  }
+  .info p{ margin:6px 0 8px 0; color:var(--muted); font-size:13px }
+  .price-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+  }
+  .price{ color:var(--danger); font-weight:700; font-size:16px; }
+  .add-btn{
+    background:var(--accent);
+    color:white;
+    padding:8px 12px;
+    border-radius:8px;
+    border:0;
+    cursor:pointer;
+    font-weight:600;
+  }
+
+  .cart-bar{
+    position:fixed;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:18px;
+    width:calc(100% - 40px);
+    max-width:1100px;
+    background:linear-gradient(90deg, rgba(211,84,0,0.06), rgba(211,84,0,0.02));
+    padding:10px 14px;
+    border-radius:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    box-shadow:0 10px 24px rgba(78,52,46,0.08);
+  }
+  .cart-bar .summary{ font-weight:700 }
+
+  .overlay{
+    position:fixed;
+    inset:0;
+    background: rgba(0,0,0,0.35);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:60;
+  }
+  .overlay.open{ display:flex }
+
+  .cart-modal{
+    width:100%;
+    max-width:720px;
+    background:var(--card);
+    border-radius:12px;
+    padding:18px;
+    box-shadow:var(--shadow);
+  }
+
+  .cart-item{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    border-bottom:1px dashed rgba(0,0,0,0.04);
+    padding-bottom:8px;
+  }
+
+  .detail{
+    position:fixed;
+    z-index:70;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .detail.open{ display:flex }
+  .detail-card{
+    width:100%;
+    max-width:900px;
+    background:var(--card);
+    border-radius:12px;
+    padding:18px;
+    display:flex;
+    gap:18px;
+    box-shadow:var(--shadow)
+  }
+  .detail-media{ width:50%; border-radius:8px; overflow:hidden }
+  .detail-body{ width:50%; display:flex; flex-direction:column; gap:12px }
+
+  @media (max-width:880px){
+    .menu-grid{ grid-template-columns: 1fr; }
+    .detail-card{ flex-direction:column }
+    .detail-media,.detail-body{ width:100% }
+    .hero-img{ display:none }
+  }
+</style>
+</head>
+<body>
+
+<!-- Aquí empieza la página -->
+<div class="container">
+  <header>
+    <div class="logo">
+      <div class="badge">SDH</div>
+      <div class="brand">
+        <div class="name">Sabor del Hogar</div>
+        <div class="tag">Comida casera en línea</div>
+      </div>
+    </div>
+
+    <div class="cta">
+      <button class="btn secondary" onclick="scrollToMenu()">Ver menú</button>
+      <button class="btn" onclick="openCart()">Carrito</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-left">
+      <h1>Haz tu pedido sin esperas</h1>
+      <p>Consulta el menú, agrega al carrito y recoge o recibe tu pedido.</p>
+      <button class="btn cta-large" onclick="scrollToMenu()">Ver menú</button>
+    </div>
+    <div class="hero-img">
+      <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=800&auto=format&fit=crop" alt="">
+    </div>
+  </section>
+
+  <main id="menu">
+    <h2 style="font-family:'Playfair Display',serif;">Menú del día</h2>
+
+    <div class="menu-grid" id="menuGrid">
+      <!-- Productos cargados con JS -->
+    </div>
+  </main>
+</div>
+
+<!-- Barra carrito -->
+<div class="cart-bar">
+  <div class="summary" id="cartSummary">🛒 Carrito (0) — Total: $0.00</div>
+  <button class="open-cart" onclick="openCart()" style="background:var(--accent-dark); color:white; padding:8px 12px; border-radius:8px; border:0;">Ver carrito</button>
+</div>
+
+<!-- Modal Carrito -->
+<div class="overlay" id="cartOverlay">
+  <div class="cart-modal">
+    <h2>Tu carrito</h2>
+    <div id="cartList"></div>
+    <div class="totals" id="totalsRow"></div>
+    <button onclick="closeCart()" class="btn secondary">Seguir comprando</button>
+  </div>
+</div>
+
+<!-- Producto detalle -->
+<div class="detail" id="detailOverlay">
+  <div class="detail-card">
+    <div class="detail-media"><img id="detailImg" src="" alt=""></div>
+    <div class="detail-body">
+      <h2 id="detailName"></h2>
+      <div id="detailPrice" style="color:var(--danger); font-weight:700;"></div>
+      <p id="detailDesc"></p>
+      <button class="add-btn" onclick="addFromDetail()">Agregar al carrito</button>
+      <button class="secondary-btn" onclick="closeDetail()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const products = [
+  {id:1, name:'Carne Asada', price:3.50, desc:'Carne asada al carbón.', img:'https://images.unsplash.com/photo-1525755662778-989d0524087e?q=80&w=800&auto=format&fit=crop'},
+  {id:2, name:'Pollo', price:3.00, desc:'Pollo a la plancha.', img:'https://images.unsplash.com/photo-1604908177547-0b6f1e3a2a77?q=80&w=800&auto=format&fit=crop'},
+  {id:3, name:'Carne Encebollada', price:3.50, desc:'Carne con cebolla.', img:'https://images.unsplash.com/photo-1604152135912-04a381ae6905?q=80&w=800&auto=format&fit=crop'},
+  {id:4, name:'Rellenos', price:3.00, desc:'Rellenos caseros.', img:'https://images.unsplash.com/photo-1617191518609-9f8eeb3a79c1?q=80&w=800&auto=format&fit=crop'},
+  {id:5, name:'Sopa de Gallina', price:5.00, desc:'Gallina criolla.', img:'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=800&auto=format&fit=crop'},
+  {id:6, name:'Pescado Frito', price:5.50, desc:'Pescado crujiente.', img:'https://images.unsplash.com/photo-1516685018646-549908c49e6f?q=80&w=800&auto=format&fit=crop'},
+  {id:7, name:'Tortas', price:3.50, desc:'Tortas caseras.', img:'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop'},
+  {id:8, name:'Tacos', price:4.00, desc:'Tacos mexicanos.', img:'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop'},
+  {id:9, name:'Nachos', price:3.00, desc:'Nachos con queso.', img:'https://images.unsplash.com/photo-1543353071-087092ec393f?q=80&w=800&auto=format&fit=crop'}
+];
+
+let cart = [];
+let currentDetail = null;
+
+function renderMenu(){
+  const grid = document.getElementById('menuGrid');
+  grid.innerHTML = "";
+  products.forEach(p=>{
+    grid.innerHTML += `
+      <div class="card">
+        <div class="thumb"><img src="${p.img}"></div>
+        <div class="info">
+          <h3>${p.name}</h3>
+          <p>${p.desc}</p>
+          <div class="price-row">
+            <div class="price">$${p.price.toFixed(2)}</div>
+            <button class="add-btn" onclick="openDetail(${p.id})">Ver / Agregar</button>
+          </div>
+        </div>
+      </div>`;
+  });
+}
+
+function updateCart(){
+  const summary = document.getElementById("cartSummary");
+  let count = cart.reduce((a,b)=>a+b.qty,0);
+  let total = cart.reduce((a,b)=>a+b.qty*b.price,0);
+
+  summary.textContent = `🛒 Carrito (${count}) — Total: $${total.toFixed(2)}`;
+
+  const list = document.getElementById("cartList");
+  list.innerHTML = "";
+  cart.forEach(i=>{
+    list.innerHTML += `
+      <div class="cart-item">
+        <div class="ci-thumb"><img style="width:60px; border-radius:8px" src="${i.img}"></div>
+        <div style="flex:1">${i.name} <br><b>${i.qty} x $${i.price.toFixed(2)}</b></div>
+      </div>`;
+  });
+
+  document.getElementById("totalsRow").innerHTML =
+    `<b>Total:</b> $${total.toFixed(2)}`;
+}
+
+function openCart(){
+  document.getElementById("cartOverlay").classList.add("open");
+}
+function closeCart(){
+  document.getElementById("cartOverlay").classList.remove("open");
+}
+
+function openDetail(id){
+  currentDetail = products.find(p=>p.id===id);
+  document.getElementById("detailImg").src = currentDetail.img;
+  document.getElementById("detailName").textContent = currentDetail.name;
+  document.getElementById("detailPrice").textContent = "$" + currentDetail.price.toFixed(2);
+  document.getElementById("detailDesc").textContent = currentDetail.desc;
+  document.getElementById("detailOverlay").classList.add("open");
+}
+
+function closeDetail(){
+  document.getElementById("detailOverlay").classList.remove("open");
+}
+
+function addFromDetail(){
+  cart.push({...currentDetail, qty:1});
+  updateCart();
+  closeDetail();
+  openCart();
+}
+
+function scrollToMenu(){
+  document.getElementById("menu").scrollIntoView({behavior:'smooth'});
+}
+
+renderMenu();
+updateCart();
+</script>
+
+</body>
+</html>
