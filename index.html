@@ -379,49 +379,119 @@
 </div>
 
 <script>
-/* =====================
-   Productos (picsum para imágenes confiables)
-   ===================== */
+/* ============================
+   PRODUCTOS — VERSIÓN FINAL
+   ============================ */
 const products = [
-  {id:1, name:'Carne Asada', price:3.50, desc:'Carne asada al carbón, acompañada de arroz y ensalada fresca.', img:'https://picsum.photos/seed/carne/800/600'},
-  {id:2, name:'Pollo a la Plancha', price:3.00, desc:'Pechuga de pollo sazonada y cocinada a la plancha.', img:'https://picsum.photos/seed/pollo/800/600'},
-  {id:3, name:'Carne Encebollada', price:3.50, desc:'Tiras de carne salteadas con cebolla caramelizada.', img:'https://picsum.photos/seed/encebollada/800/600'},
-  {id:4, name:'Rellenos', price:3.00, desc:'Rellenos tradicionales servidos con arroz y ensalada.', img:'https://picsum.photos/seed/rellenos/800/600'},
-  {id:5, name:'Sopa de Gallina', price:5.00, desc:'Sopa de gallina criolla con verduras frescas.', img:'https://picsum.photos/seed/sopagallina/800/600'},
-  {id:6, name:'Pescado Frito', price:5.50, desc:'Pescado dorado y crujiente, servido con arroz y ensalada.', img:'https://picsum.photos/seed/pescado/800/600'},
-  {id:7, name:'Tortas', price:3.50, desc:'Torta preparada con pan suave, carne a elección, vegetales frescos y salsas caseras.', img:'https://picsum.photos/seed/torta/800/600'},
-  {id:8, name:'Tacos', price:4.00, desc:'Tres tacos rellenos con carne sazonada, acompañados de pico de gallo y salsa especial.', img:'https://picsum.photos/seed/tacos/800/600'},
-  {id:9, name:'Nachos', price:3.00, desc:'Totopos cubiertos con frijoles, queso derretido y salsa de la casa.', img:'https://picsum.photos/seed/nachos/800/600'},
-  {id:10, name:'Hamburguesa', price:4.50, desc:'Hamburguesa casera con queso y papas.', img:'https://picsum.photos/seed/hamburguesa/800/600'}
+  {
+    id: 1,
+    name: 'Carne Asada',
+    price: 3.50,
+    desc: 'Carne asada al carbón, acompañada de arroz y ensalada fresca.',
+    img: 'https://picsum.photos/seed/carneasada/800/600'
+  },
+  {
+    id: 2,
+    name: 'Pollo a la Plancha',
+    price: 3.00,
+    desc: 'Pechuga de pollo sazonada y cocinada a la plancha.',
+    img: 'https://picsum.photos/seed/pollo/800/600'
+  },
+  {
+    id: 3,
+    name: 'Carne Encebollada',
+    price: 3.50,
+    desc: 'Tiras de carne salteadas con cebolla caramelizada.',
+    img: 'https://picsum.photos/seed/encebollada/800/600'
+  },
+  {
+    id: 4,
+    name: 'Rellenos',
+    price: 3.00,
+    desc: 'Rellenos tradicionales servidos con arroz y ensalada.',
+    img: 'https://picsum.photos/seed/rellenos/800/600'
+  },
+  {
+    id: 5,
+    name: 'Sopa de Gallina',
+    price: 5.00,
+    desc: 'Sopa de gallina criolla con verduras frescas.',
+    img: 'https://picsum.photos/seed/sopagallina/800/600'
+  },
+  {
+    id: 6,
+    name: 'Pescado Frito',
+    price: 5.50,
+    desc: 'Pescado dorado y crujiente, servido con arroz y ensalada.',
+    img: 'https://picsum.photos/seed/pescado/800/600'
+  },
+  {
+    id: 7,
+    name: 'Tortas',
+    price: 3.50,
+    desc: 'Torta con carne y vegetales frescos.',
+    img: 'https://picsum.photos/seed/torta/800/600'
+  },
+  {
+    id: 8,
+    name: 'Tacos',
+    price: 4.00,
+    desc: 'Tres tacos con carne sazonada, pico de gallo y salsa.',
+    img: 'https://picsum.photos/seed/tacos/800/600'
+  },
+  {
+    id: 9,
+    name: 'Nachos',
+    price: 3.00,
+    desc: 'Totopos con queso derretido y frijoles.',
+    img: 'https://picsum.photos/seed/nachos/800/600'
+  },
+  {
+    id: 10,
+    name: 'Hamburguesa',
+    price: 4.50,
+    desc: 'Hamburguesa casera con papas.',
+    img: 'https://picsum.photos/seed/hamburguesa/800/600'
+  }
 ];
 
-let cart = [];
-let currentDetail = null;
-let detailQty = 1;
-
-function formatMoney(v){ return '$' + Number(v).toFixed(2); }
-
-/* Render menu */
+/* ======================================
+   FUNCIÓN FINAL PARA RENDERIZAR EL MENÚ
+   ====================================== */
 function renderMenu(){
   const grid = document.getElementById('menuGrid');
   grid.innerHTML = "";
+
   products.forEach(p=>{
     const card = document.createElement('article');
     card.className = 'card';
+
     card.innerHTML = `
-      <div class="thumb"><img src="${p.img}" alt="${p.name}"></div>
+      <div class="thumb">
+        <img 
+          src="${p.img}" 
+          alt="${p.name}"
+          loading="lazy"
+          onerror="this.onerror=null; this.src='https://picsum.photos/seed/fallback/400/300';"
+        >
+      </div>
+
       <div class="info">
         <h3>${p.name}</h3>
         <p>${p.desc}</p>
+
         <div class="price-row">
           <div class="price">${formatMoney(p.price)}</div>
           <button class="add-btn" onclick="openDetail(${p.id})">Ver / Agregar</button>
         </div>
       </div>
     `;
+
     grid.appendChild(card);
   });
 }
+</script>
+
 
 /* Update cart UI */
 function updateCart(){
@@ -606,6 +676,7 @@ document.addEventListener('change', function(e){
 </script>
 </body>
 </html>
+
 
 
 
