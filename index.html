@@ -3,444 +3,317 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Sabor 503 — Menú en Línea</title>
-
-<!-- Fuentes -->
+<title>Sabor 503 — Menú por categorías</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-
 <style>
   :root{
-    --bg: #FAF3E0;
-    --card: #fff;
-    --accent: #D35400;
-    --accent-dark: #B64500;
-    --muted: #A1887F;
-    --text: #4E342E;
-    --danger: #C0392B;
-    --shadow: 0 6px 18px rgba(78,52,46,0.08);
+    --bg:#FAF3E0; --card:#fff; --accent:#D35400; --muted:#7a6a60; --text:#4E342E; --shadow:0 6px 18px rgba(78,52,46,0.08);
   }
-
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    font-family:"Inter",sans-serif;
-    background:var(--bg);
-    color:var(--text);
-  }
-
-  .container{
-    max-width:1100px;
-    margin:auto;
-    padding:20px;
-  }
-
-  header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
-  }
-
-  .logo{
-    display:flex;
-    gap:10px;
-    align-items:center;
-  }
-
-  .badge{
-    background:var(--accent);
-    width:56px; height:56px;
-    border-radius:12px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    color:white;
-    font-weight:700;
-    font-size:20px;
-  }
-
-  .btn{
-    background:var(--accent);
-    color:white;
-    border:0;
-    padding:10px 16px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:600;
-  }
-
-  .btn.secondary{
-    background:transparent;
-    border:1px solid rgba(0,0,0,0.2);
-    color:var(--text);
-  }
-
-  .hero{
-    display:flex;
-    gap:20px;
-    background:white;
-    padding:20px;
-    border-radius:12px;
-    box-shadow:var(--shadow);
-    margin-bottom:20px;
-  }
-
-  .hero-img img{
-    width:220px; height:140px; border-radius:12px; object-fit:cover;
-  }
-
-  .menu-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:16px;
-  }
-
-  .card{
-    background:white;
-    display:flex;
-    gap:12px;
-    padding:12px;
-    border-radius:12px;
-    box-shadow:var(--shadow);
-  }
-
-  .thumb img{
-    width:100px;
-    height:100px;
-    border-radius:10px;
-    object-fit:cover;
-  }
-
-  .price{
-    color:var(--danger);
-    font-weight:700;
-    font-size:16px;
-  }
-
-  .cart-bar{
-    position:fixed;
-    bottom:16px;
-    left:50%;
-    transform:translateX(-50%);
-    width:calc(100% - 40px);
-    max-width:1100px;
-    background:white;
-    padding:10px 16px;
-    border-radius:12px;
-    box-shadow:var(--shadow);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-  }
-
-  .overlay{
-    position:fixed; inset:0;
-    background:rgba(0,0,0,0.5);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    z-index:20;
-  }
-  .overlay.open{ display:flex; }
-
-  .cart-modal, .detail-card{
-    background:white;
-    padding:20px;
-    border-radius:12px;
-    max-width:800px;
-    width:100%;
-    box-shadow:var(--shadow);
-  }
-
-  .detail-card{
-    display:flex;
-    gap:20px;
-  }
-
-  .detail-media img{
-    width:100%;
-    border-radius:12px;
-    object-fit:cover;
-  }
-
-  @media(max-width:800px){
-    .menu-grid{
-      grid-template-columns:1fr;
-    }
-    .detail-card{
-      flex-direction:column;
-    }
-  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto;background:var(--bg);color:var(--text)}
+  .container{max-width:1100px;margin:24px auto;padding:18px}
+  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+  .badge{background:var(--accent);color:white;padding:10px 14px;border-radius:10px;font-weight:700}
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+  .chip{background:var(--card);padding:8px 10px;border-radius:999px;cursor:pointer;box-shadow:var(--shadow)}
+  .chip.active{outline:3px solid rgba(211,84,0,0.12)}
+  .menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .card{background:var(--card);padding:12px;border-radius:12px;display:flex;gap:12px;box-shadow:var(--shadow)}
+  .thumb img{width:100px;height:100px;object-fit:cover;border-radius:10px}
+  .price{color:#C0392B;font-weight:700}
+  .cart-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;width:calc(100% - 40px);max-width:1100px;background:var(--card);padding:10px;border-radius:12px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .overlay.open{display:flex}
+  .cart-modal{width:100%;max-width:760px;background:var(--card);padding:18px;border-radius:12px;box-shadow:var(--shadow)}
+  .detail-card{width:100%;max-width:900px;background:var(--card);padding:18px;border-radius:12px;box-shadow:var(--shadow);display:flex;gap:12px}
+  @media(max-width:880px){.menu-grid{grid-template-columns:1fr}.detail-card{flex-direction:column}}
+  .btn{background:var(--accent);color:white;border:0;padding:8px 12px;border-radius:8px;cursor:pointer}
+  .btn.secondary{background:transparent;border:1px solid rgba(0,0,0,0.08);color:var(--text)}
+  input,select{padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.08)}
 </style>
 </head>
 <body>
-
 <div class="container">
-
-<header>
-  <div class="logo">
-    <div class="badge">503</div>
-    <div>
-      <h3 style="margin:0; font-family:'Playfair Display',serif;">Sabor 503</h3>
-      <small>Comida casera • Pedidos online</small>
+  <header>
+    <div style="display:flex;gap:12px;align-items:center">
+      <div class="badge">S503</div>
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-weight:700">Sabor 503</div>
+        <small style="color:var(--muted)">Comida casera • Pedidos online</small>
+      </div>
     </div>
-  </div>
+    <div>
+      <button class="btn" onclick="openCart()">Carrito</button>
+    </div>
+  </header>
 
-  <button class="btn" onclick="openCart()">Carrito</button>
-</header>
+  <section>
+    <h1 style="font-family:'Playfair Display',serif">Menú por categorías</h1>
+    <p style="color:var(--muted)">Filtra por categoría para encontrar más rápido.</p>
 
-<section class="hero">
-  <div style="flex:1;">
-    <h1 style="font-family:'Playfair Display',serif;">Pide sin hacer fila</h1>
-    <p>Consulta el menú, agrega al carrito y recibe o recoge tu comida.</p>
-    <button class="btn" onclick="scrollToMenu()">Ver menú</button>
-  </div>
-  <div class="hero-img">
-    <img src="https://images.pexels.com/photos/1639562/pexels-photo-1639562.jpeg?auto=compress&cs=tinysrgb&w=800">
-  </div>
-</section>
+    <div class="filters" id="filters"></div>
 
-<h2 style="font-family:'Playfair Display',serif;">Menú del día</h2>
-<div class="menu-grid" id="menuGrid"></div>
-
+    <div class="menu-grid" id="menuGrid"></div>
+  </section>
 </div>
 
 <div class="cart-bar">
   <div id="cartSummary">🛒 Carrito (0) — Total: $0.00</div>
-  <button class="btn" onclick="openCart()">Ver carrito</button>
+  <div><button class="btn" onclick="openCart()">Ver carrito</button></div>
 </div>
 
-<!-- CARRITO -->
-<div class="overlay" id="cartOverlay">
-  <div class="cart-modal">
-    <h2>Tu pedido</h2>
-    <div id="cartList"></div>
+<!-- Modal carrito -->
+<div class="overlay" id="cartOverlay" aria-hidden="true">
+  <div class="cart-modal" role="dialog">
+    <h2>Tu carrito</h2>
+    <div id="cartList" style="margin-top:8px"></div>
 
-    <label>Tipo de entrega</label>
-    <select id="deliveryType">
-      <option value="pickup">Recoger en restaurante</option>
-      <option value="delivery">Domicilio (+$1.00)</option>
-    </select>
+    <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
+      <div>
+        <label>Tipo de entrega</label><br>
+        <select id="deliveryType">
+          <option value="pickup">Recoger en restaurante</option>
+          <option value="delivery">Domicilio (+ $1.00)</option>
+        </select>
+      </div>
 
-    <label>Método de pago</label>
-    <select id="paymentMethod">
-      <option value="cash">Efectivo</option>
-      <option value="transfer">Transferencia</option>
-      <option value="card">Tarjeta</option>
-    </select>
-
-    <div id="paymentDetails" style="display:none;">
-      <input id="cardName" placeholder="Nombre en la tarjeta">
-      <input id="cardNumber" placeholder="Número de tarjeta">
-      <input id="cardExp" placeholder="MM/AA">
-      <input id="cardCVC" placeholder="CVC">
+      <div>
+        <label>Método de pago</label><br>
+        <select id="paymentMethod">
+          <option value="cash">Efectivo</option>
+          <option value="transfer">Transferencia</option>
+          <option value="card">Tarjeta</option>
+        </select>
+      </div>
     </div>
 
-    <div id="totalsRow" style="margin-top:10px;"></div>
+    <div id="paymentDetails" style="display:none;margin-top:10px">
+      <label>Detalles tarjeta (simulado)</label><br>
+      <input id="cardName" placeholder="Nombre" style="width:100%;padding:8px;margin:6px 0"><br>
+      <input id="cardNumber" placeholder="Número" style="width:100%;padding:8px;margin:6px 0"><br>
+      <div style="display:flex;gap:8px">
+        <input id="cardExp" placeholder="MM/AA" style="flex:1;padding:8px">
+        <input id="cardCVC" placeholder="CVC" style="width:100px;padding:8px">
+      </div>
+    </div>
 
-    <button class="btn" onclick="confirmOrder()">Confirmar pedido</button>
-    <button class="btn secondary" onclick="closeCart()">Cerrar</button>
+    <div id="totalsRow" style="margin-top:12px"></div>
+
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn" onclick="confirmOrder()">Confirmar pedido</button>
+      <button class="btn secondary" onclick="closeCart()">Seguir comprando</button>
+    </div>
   </div>
 </div>
 
-<!-- DETALLE -->
+<!-- Modal detalle -->
 <div class="overlay" id="detailOverlay">
-  <div class="detail-card">
-    <div class="detail-media"><img id="detailImg"></div>
-    <div class="detail-body">
-      <h2 id="detailName"></h2>
-      <div id="detailPrice" style="color:#C0392B; font-weight:700;"></div>
-      <p id="detailDesc"></p>
+  <div class="detail-card" role="dialog">
+    <div style="width:48%"><img id="detailImg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:10px"></div>
+    <div class="detail-body" style="width:52%">
+      <h3 id="detailName"></h3>
+      <div id="detailPrice" style="color:#C0392B;font-weight:700"></div>
+      <p id="detailDesc" style="color:var(--muted)"></p>
+      <div id="detailOptions" style="margin-top:8px"></div>
 
-      <label>Opciones:</label>
-      <div id="detailOptions"></div>
-
-      <label>Cantidad</label>
-      <div style="display:flex; gap:8px; align-items:center;">
-        <button onclick="changeDetailQty(-1)">-</button>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:12px">
+        <label style="font-weight:700">Cantidad</label>
+        <button class="btn secondary" onclick="changeDetailQty(-1)">-</button>
         <div id="detailQty">1</div>
-        <button onclick="changeDetailQty(1)">+</button>
+        <button class="btn secondary" onclick="changeDetailQty(1)">+</button>
       </div>
 
-      <button class="btn" onclick="addFromDetail()">Agregar</button>
-      <button class="btn secondary" onclick="closeDetail()">Cerrar</button>
+      <div style="margin-top:12px;display:flex;gap:8px">
+        <button class="btn" onclick="addFromDetail()">Agregar al carrito</button>
+        <button class="btn secondary" onclick="closeDetail()">Cerrar</button>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
-/* ============================================
-   PRODUCTOS CON IMÁGENES REALES — FINAL
-   ============================================ */
+/* ============ Productos (archivos que subiste al repo) ============ */
 const products = [
-  {id:1, name:'Carne Asada', price:3.50, desc:'Carne asada al carbón.', img:'https://images.pexels.com/photos/4106480/pexels-photo-4106480.jpeg?auto=compress&w=800'},
-  {id:2, name:'Pollo a la Plancha', price:3.00, desc:'Pollo a la plancha.', img:'https://images.pexels.com/photos/3296276/pexels-photo-3296276.jpeg?auto=compress&w=800'},
-  {id:3, name:'Carne Encebollada', price:3.50, desc:'Carne con cebolla.', img:'https://images.pexels.com/photos/5949885/pexels-photo-5949885.jpeg?auto=compress&w=800'},
-  {id:4, name:'Rellenos', price:3.00, desc:'Rellenos caseros.', img:'https://images.pexels.com/photos/6210941/pexels-photo-6210941.jpeg?auto=compress&w=800'},
-  {id:5, name:'Sopa de Gallina', price:5.00, desc:'Sopa criolla.', img:'https://images.pexels.com/photos/5949883/pexels-photo-5949883.jpeg?auto=compress&w=800'},
-  {id:6, name:'Pescado Frito', price:5.50, desc:'Pescado dorado.', img:'https://images.pexels.com/photos/1618916/pexels-photo-1618916.jpeg?auto=compress&w=800'},
-  {id:7, name:'Tortas', price:3.50, desc:'Torta casera.', img:'https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&w=800'},
-  {id:8, name:'Tacos', price:4.00, desc:'Tres tacos caseros.', img:'https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&w=800'},
-  {id:9, name:'Nachos', price:3.00, desc:'Nachos con queso.', img:'https://images.pexels.com/photos/825661/pexels-photo-825661.jpeg?auto=compress&w=800'},
-  {id:10, name:'Hamburguesa', price:4.50, desc:'Hamburguesa con papas.', img:'https://images.pexels.com/photos/1639562/pexels-photo-1639562.jpeg?auto=compress&w=800'}
+  {id:1, name:'Carne Asada', price:3.50, category:'Res', desc:'Carne asada al carbón servida con acompañamientos.', img:'carne-asada.webp'},
+  {id:2, name:'Pollo a la Plancha', price:3.00, category:'Pollo', desc:'Pechuga de pollo a la plancha con sazón casera.', img:'pollo.avif'},
+  {id:3, name:'Carne Encebollada', price:3.50, category:'Res', desc:'Carne salteada con cebolla caramelizada.', img:'carne-encebollada.jpg'},
+  {id:4, name:'Rellenos', price:3.00, category:'Tradicional', desc:'Rellenos caseros acompañados de ensalada.', img:'rellenos.jpg'},
+  {id:5, name:'Sopa de Gallina', price:5.00, category:'Sopas', desc:'Sopa de gallina criolla con verduras frescas.', img:'sopa-gallina.jpg'},
+  {id:6, name:'Pescado Frito', price:5.50, category:'Pescado', desc:'Filete de pescado frito dorado y crujiente.', img:'pescado.webp'},
+  {id:7, name:'Tortas', price:3.50, category:'Pan', desc:'Deliciosa torta casera con ingredientes frescos.', img:'hamburguesas.jpg'},
+  {id:8, name:'Tacos', price:4.00, category:'Mexicano', desc:'Tacos caseros de carne con salsas frescas.', img:'tacos.jpg'},
+  {id:9, name:'Nachos', price:3.00, category:'Botana', desc:'Nachos con queso derretido y frijol.', img:'nachos.webp'},
+  {id:10, name:'Hamburguesa', price:4.50, category:'Pan', desc:'Hamburguesa casera con papas y aderezos.', img:'hamburguesas.jpg'}
 ];
 
-/* Render menú con fallback */
+/* ============ Categorías dinámicas ============ */
+const categories = ['Todos', ...Array.from(new Set(products.map(p=>p.category)))];
+let activeCategory = 'Todos';
+let cart = [];
+let currentDetail = null;
+let detailQty = 1;
+
+/* Render filtros */
+function renderFilters(){
+  const wrap = document.getElementById('filters');
+  wrap.innerHTML = '';
+  categories.forEach(cat=>{
+    const el = document.createElement('div');
+    el.className = 'chip' + (cat===activeCategory ? ' active' : '');
+    el.textContent = cat;
+    el.onclick = ()=>{ activeCategory = cat; renderFilters(); renderMenu(); };
+    wrap.appendChild(el);
+  });
+}
+
+/* Render menú con filtro y fallback de imágenes */
 function renderMenu(){
-  const grid = document.getElementById("menuGrid");
-  grid.innerHTML = "";
-
-  products.forEach(p=>{
-    const card = document.createElement("article");
-    card.className="card";
-
+  const grid = document.getElementById('menuGrid');
+  grid.innerHTML = '';
+  const items = (activeCategory==='Todos') ? products : products.filter(p=>p.category===activeCategory);
+  items.forEach(p=>{
+    const card = document.createElement('article');
+    card.className = 'card';
     card.innerHTML = `
       <div class="thumb">
-        <img src="${p.img}"
-             onerror="this.src='https://images.pexels.com/photos/4106480/pexels-photo-4106480.jpeg?auto=compress&w=800'">
+        <img src="${p.img}" alt="${p.name}" onerror="this.onerror=null; this.src='https://images.pexels.com/photos/1639562/pexels-photo-1639562.jpeg?auto=compress&w=800'">
       </div>
-      <div class="info">
-        <h3>${p.name}</h3>
-        <p>${p.desc}</p>
-        <div class="price">${formatMoney(p.price)}</div>
-        <button class="btn" onclick="openDetail(${p.id})">Ver / Agregar</button>
+      <div style="flex:1">
+        <h3 style="margin:0">${p.name}</h3>
+        <small style="color:var(--muted)">${p.category}</small>
+        <p style="margin:6px 0;color:var(--muted)">${p.desc}</p>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="price">${formatMoney(p.price)}</div>
+          <div>
+            <button class="btn" onclick="openDetail(${p.id})">Ver / Agregar</button>
+          </div>
+        </div>
       </div>
     `;
-
     grid.appendChild(card);
   });
 }
 
 /* Helpers */
-function formatMoney(n){ return "$" + n.toFixed(2); }
+function formatMoney(n){ return '$' + Number(n).toFixed(2); }
 
-/* Carrito */
-let cart=[];
+/* Carrito UI */
 function updateCart(){
-  let total = cart.reduce((a,b)=>a+b.price*b.qty,0);
-  document.getElementById("cartSummary").textContent =
-    `🛒 Carrito (${cart.length}) — Total: ${formatMoney(total)}`;
-  
-  let list = document.getElementById("cartList");
-  list.innerHTML="";
+  const summary = document.getElementById('cartSummary');
+  const count = cart.reduce((s,i)=>s+i.qty,0);
+  const subtotal = cart.reduce((s,i)=>s + i.qty * i.price,0);
+  summary.textContent = `🛒 Carrito (${count}) — Total: ${formatMoney(subtotal)}`;
 
-  cart.forEach((i,idx)=>{
+  const list = document.getElementById('cartList');
+  list.innerHTML = '';
+  if(cart.length===0){ list.innerHTML = '<p>Carrito vacío</p>'; return; }
+  cart.forEach((it, idx)=>{
     list.innerHTML += `
-      <div style="display:flex; gap:10px; margin-bottom:10px;">
-        <img src="${i.img}" style="width:60px;height:60px;border-radius:8px;object-fit:cover;">
-        <div style="flex:1;">
-          <b>${i.name}</b><br>
-          ${i.options.join(", ")}<br>
-          ${i.qty} x ${formatMoney(i.price)}
+      <div style="display:flex;gap:8px;margin-bottom:8px;align-items:center">
+        <img src="${it.img}" style="width:64px;height:64px;object-fit:cover;border-radius:8px" onerror="this.src='https://images.pexels.com/photos/1639562/pexels-photo-1639562.jpeg?auto=compress&w=800'">
+        <div style="flex:1">
+          <b>${it.name}</b><br>
+          <small style="color:var(--muted)">${(it.options && it.options.length)? it.options.join(', '): ''}</small><br>
+          <small>${it.qty} x ${formatMoney(it.price)}</small>
         </div>
-        <button onclick="removeItem(${idx})">X</button>
+        <div>
+          <button class="btn secondary" onclick="changeItemQty(${idx},-1)">-</button>
+          <button class="btn secondary" onclick="changeItemQty(${idx},1)">+</button>
+          <button class="btn secondary" onclick="removeItem(${idx})">Eliminar</button>
+        </div>
       </div>
     `;
   });
 
-  const subtotal = cart.reduce((a,b)=>a+b.qty*b.price,0);
-  const deliveryFee = document.getElementById("deliveryType").value==="delivery" ? 1 : 0;
-
-  document.getElementById("totalsRow").innerHTML = `
-    <p>Subtotal: ${formatMoney(subtotal)}</p>
-    <p>Entrega: ${formatMoney(deliveryFee)}</p>
-    <p><b>Total: ${formatMoney(subtotal+deliveryFee)}</b></p>
+  const deliveryTypeEl = document.getElementById('deliveryType');
+  const deliveryFee = (deliveryTypeEl && deliveryTypeEl.value === 'delivery') ? 1.00 : 0.00;
+  const total = subtotal + deliveryFee;
+  document.getElementById('totalsRow').innerHTML = `
+    <div>Subtotal: ${formatMoney(subtotal)}</div>
+    <div>Entrega: ${formatMoney(deliveryFee)}</div>
+    <div style="font-weight:700;margin-top:6px">Total: ${formatMoney(total)}</div>
   `;
 }
 
-function removeItem(i){
-  cart.splice(i,1);
-  updateCart();
-}
+/* cart actions */
+function openCart(){ document.getElementById('cartOverlay').classList.add('open'); updateCart(); }
+function closeCart(){ document.getElementById('cartOverlay').classList.remove('open'); }
+function changeItemQty(i,d){ cart[i].qty += d; if(cart[i].qty<=0) cart.splice(i,1); updateCart(); }
+function removeItem(i){ cart.splice(i,1); updateCart(); }
 
-function openCart(){ document.getElementById("cartOverlay").classList.add("open"); updateCart();}
-function closeCart(){ document.getElementById("cartOverlay").classList.remove("open");}
-
-/* Detalle */
-let currentDetail=null;
-let detailQty=1;
-
+/* detail actions */
 function openDetail(id){
   currentDetail = products.find(p=>p.id===id);
   detailQty = 1;
-
-  document.getElementById("detailImg").src = currentDetail.img;
-  document.getElementById("detailName").textContent = currentDetail.name;
-  document.getElementById("detailPrice").textContent = formatMoney(currentDetail.price);
-  document.getElementById("detailDesc").textContent = currentDetail.desc;
-
-  const opts = ["Sin cebolla","Extra salsa","Vegetales aparte"];
-  document.getElementById("detailOptions").innerHTML =
-    opts.map(o=>`<label><input type="checkbox" value="${o}"> ${o}</label><br>`).join("");
-
-  document.getElementById("detailQty").textContent = detailQty;
-
-  document.getElementById("detailOverlay").classList.add("open");
+  document.getElementById('detailImg').src = currentDetail.img;
+  document.getElementById('detailName').textContent = currentDetail.name;
+  document.getElementById('detailPrice').textContent = formatMoney(currentDetail.price);
+  document.getElementById('detailDesc').textContent = currentDetail.desc;
+  document.getElementById('detailOptions').innerHTML = ['Sin cebolla','Extra salsa','Vegetales aparte'].map(o=>`<label><input type="checkbox" value="${o}"> ${o}</label>`).join('<br>');
+  document.getElementById('detailQty').textContent = detailQty;
+  document.getElementById('detailOverlay').classList.add('open');
 }
-
-function closeDetail(){ document.getElementById("detailOverlay").classList.remove("open"); }
-
-function changeDetailQty(d){
-  detailQty = Math.max(1, detailQty + d);
-  document.getElementById("detailQty").textContent = detailQty;
-}
-
+function closeDetail(){ document.getElementById('detailOverlay').classList.remove('open'); }
+function changeDetailQty(d){ detailQty = Math.max(1, detailQty + d); document.getElementById('detailQty').textContent = detailQty; }
 function addFromDetail(){
-  const options = [...document.querySelectorAll('#detailOptions input:checked')].map(x=>x.value);
-
-  cart.push({
-    ...currentDetail,
-    qty:detailQty,
-    options
-  });
-
+  const opts = Array.from(document.querySelectorAll('#detailOptions input:checked')).map(x=>x.value);
+  cart.push({...currentDetail, qty: detailQty, options: opts});
   closeDetail();
   openCart();
 }
 
-/* Pago */
-document.addEventListener("change", e=>{
-  if(e.target.id==="paymentMethod"){
-    document.getElementById("paymentDetails").style.display =
-      e.target.value==="card" ? "block" : "none";
+/* payment UI toggle */
+document.addEventListener('change', (e)=>{
+  if(e.target && e.target.id === 'paymentMethod'){
+    document.getElementById('paymentDetails').style.display = e.target.value === 'card' ? 'block' : 'none';
   }
-  if(e.target.id==="deliveryType") updateCart();
+  if(e.target && e.target.id === 'deliveryType'){ updateCart(); }
 });
 
+/* confirm: guarda pedido en localStorage y redirige */
 function confirmOrder(){
-  if(cart.length===0){ alert("Carrito vacío"); return; }
-
-  const pm = document.getElementById("paymentMethod").value;
-  if(pm==="card"){
-    if(
-      !document.getElementById("cardName").value ||
-      !document.getElementById("cardNumber").value ||
-      !document.getElementById("cardExp").value ||
-      !document.getElementById("cardCVC").value
-    ){
-      alert("Completa los datos de la tarjeta.");
+  if(cart.length===0){ alert('El carrito está vacío'); return; }
+  const paymentMethod = document.getElementById('paymentMethod').value;
+  if(paymentMethod === 'card'){
+    if(!document.getElementById('cardName').value.trim() || !document.getElementById('cardNumber').value.trim()){
+      alert('Completa los datos de la tarjeta (simulado)');
       return;
     }
   }
 
-  alert("Pedido confirmado ✔️\n¡Gracias por comprar en Sabor 503!");
+  const subtotal = cart.reduce((s,i)=>s+i.qty*i.price,0);
+  const deliveryType = document.getElementById('deliveryType').value;
+  const deliveryFee = (deliveryType==='delivery')? 1.00 : 0.00;
+  const total = subtotal + deliveryFee;
+  const order = {
+    id: Math.floor(100 + Math.random()*900),
+    createdAt: new Date().toISOString(),
+    items: cart,
+    totals: {subtotal, deliveryFee, total},
+    deliveryType,
+    paymentMethod,
+    paymentCaptured: (paymentMethod==='card') ? {
+      name: document.getElementById('cardName').value.trim(),
+      numberMasked: '**** **** **** ' + (document.getElementById('cardNumber').value.trim().slice(-4))
+    } : null
+  };
 
-  cart=[];
-  closeCart();
+  localStorage.setItem('sabor503_last_order', JSON.stringify(order));
+  cart = [];
   updateCart();
+  closeCart();
+  window.location.href = 'confirmacion.html';
 }
 
-/* Scroll */
-function scrollToMenu(){ document.getElementById("menuGrid").scrollIntoView({behavior:"smooth"}); }
-
-/* Inicial */
+/* init */
+renderFilters();
 renderMenu();
 updateCart();
 </script>
-
 </body>
 </html>
+
+
 
 
 
