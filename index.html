@@ -286,7 +286,7 @@
       <button class="btn cta-large" onclick="scrollToMenu()">Ver menú</button>
     </div>
     <div class="hero-img" aria-hidden="true">
-      <img src="https://images.unsplash.com/photo-1541542684-9cfb5b4c5b5e?q=80&w=800&auto=format&fit=crop" alt="">
+      <img src="https://picsum.photos/seed/hero/800/500" alt="">
     </div>
   </section>
 
@@ -327,6 +327,17 @@
           <option value="transfer">Transferencia</option>
           <option value="card">Tarjeta</option>
         </select>
+      </div>
+
+      <!-- Payment card details (hidden unless paymentMethod === 'card') -->
+      <div id="paymentDetails" style="margin-top:10px; display:none; width:100%;">
+        <label style="font-weight:600; display:block; margin-bottom:6px">Detalles de tarjeta</label>
+        <input id="cardName" placeholder="Nombre en la tarjeta" style="width:100%; padding:8px; border-radius:8px; border:1px solid rgba(0,0,0,0.06); margin-bottom:8px">
+        <input id="cardNumber" placeholder="Número de tarjeta" style="width:100%; padding:8px; border-radius:8px; border:1px solid rgba(0,0,0,0.06); margin-bottom:8px">
+        <div style="display:flex; gap:8px;">
+          <input id="cardExp" placeholder="MM/AA" style="flex:1; padding:8px; border-radius:8px; border:1px solid rgba(0,0,0,0.06)">
+          <input id="cardCVC" placeholder="CVC" style="width:100px; padding:8px; border-radius:8px; border:1px solid rgba(0,0,0,0.06)">
+        </div>
       </div>
     </div>
 
@@ -369,19 +380,19 @@
 
 <script>
 /* =====================
-   Productos (con imágenes válidas)
+   Productos (picsum para imágenes confiables)
    ===================== */
 const products = [
-  {id:1, name:'Carne Asada', price:3.50, desc:'Carne asada al carbón, acompañada de arroz y ensalada fresca.', img:'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop'},
-  {id:2, name:'Pollo a la Plancha', price:3.00, desc:'Pechuga de pollo sazonada y cocinada a la plancha.', img:'https://images.unsplash.com/photo-1604908177547-0b6f1e3a2a77?q=80&w=800&auto=format&fit=crop'},
-  {id:3, name:'Carne Encebollada', price:3.50, desc:'Tiras de carne salteadas con cebolla caramelizada.', img:'https://images.unsplash.com/photo-1604152135912-04a381ae6905?q=80&w=800&auto=format&fit=crop'},
-  {id:4, name:'Rellenos', price:3.00, desc:'Rellenos tradicionales servidos con arroz y ensalada.', img:'https://images.unsplash.com/photo-1551183053-bf91a1d81141?q=80&w=800&auto=format&fit=crop'},
-  {id:5, name:'Sopa de Gallina', price:5.00, desc:'Sopa de gallina criolla con verduras frescas.', img:'https://images.unsplash.com/photo-1523986371872-9d3ba2e2f642?q=80&w=800&auto=format&fit=crop'},
-  {id:6, name:'Pescado Frito', price:5.50, desc:'Pescado dorado y crujiente, servido con arroz y ensalada.', img:'https://images.unsplash.com/photo-1606312619343-4b4f1c33f3c2?q=80&w=800&auto=format&fit=crop'},
-  {id:7, name:'Tortas', price:3.50, desc:'Torta preparada con pan suave, carne a elección, vegetales frescos y salsas caseras.', img:'https://images.unsplash.com/photo-1551365981-9f0a9c4d8a3a?q=80&w=800&auto=format&fit=crop'},
-  {id:8, name:'Tacos', price:4.00, desc:'Tres tacos rellenos con carne sazonada, acompañados de pico de gallo y salsa especial.', img:'https://images.unsplash.com/photo-1544025162-1b4f2d5a6b7d?q=80&w=800&auto=format&fit=crop'},
-  {id:9, name:'Nachos', price:3.00, desc:'Totopos cubiertos con frijoles, queso derretido y salsa de la casa.', img:'https://images.unsplash.com/photo-1551183053-4f6d0c3f4b2a?q=80&w=800&auto=format&fit=crop'},
-  {id:10, name:'Hamburguesa', price:4.50, desc:'Hamburguesa casera con queso y papas.', img:'https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=800&auto=format&fit=crop'}
+  {id:1, name:'Carne Asada', price:3.50, desc:'Carne asada al carbón, acompañada de arroz y ensalada fresca.', img:'https://picsum.photos/seed/carne/800/600'},
+  {id:2, name:'Pollo a la Plancha', price:3.00, desc:'Pechuga de pollo sazonada y cocinada a la plancha.', img:'https://picsum.photos/seed/pollo/800/600'},
+  {id:3, name:'Carne Encebollada', price:3.50, desc:'Tiras de carne salteadas con cebolla caramelizada.', img:'https://picsum.photos/seed/encebollada/800/600'},
+  {id:4, name:'Rellenos', price:3.00, desc:'Rellenos tradicionales servidos con arroz y ensalada.', img:'https://picsum.photos/seed/rellenos/800/600'},
+  {id:5, name:'Sopa de Gallina', price:5.00, desc:'Sopa de gallina criolla con verduras frescas.', img:'https://picsum.photos/seed/sopagallina/800/600'},
+  {id:6, name:'Pescado Frito', price:5.50, desc:'Pescado dorado y crujiente, servido con arroz y ensalada.', img:'https://picsum.photos/seed/pescado/800/600'},
+  {id:7, name:'Tortas', price:3.50, desc:'Torta preparada con pan suave, carne a elección, vegetales frescos y salsas caseras.', img:'https://picsum.photos/seed/torta/800/600'},
+  {id:8, name:'Tacos', price:4.00, desc:'Tres tacos rellenos con carne sazonada, acompañados de pico de gallo y salsa especial.', img:'https://picsum.photos/seed/tacos/800/600'},
+  {id:9, name:'Nachos', price:3.00, desc:'Totopos cubiertos con frijoles, queso derretido y salsa de la casa.', img:'https://picsum.photos/seed/nachos/800/600'},
+  {id:10, name:'Hamburguesa', price:4.50, desc:'Hamburguesa casera con queso y papas.', img:'https://picsum.photos/seed/hamburguesa/800/600'}
 ];
 
 let cart = [];
@@ -443,7 +454,8 @@ function updateCart(){
 
   // totals and delivery
   const subtotal = cart.reduce((s,i)=>s + i.qty * i.price,0);
-  const deliveryType = document.getElementById('deliveryType') ? document.getElementById('deliveryType').value : 'pickup';
+  const deliveryTypeEl = document.getElementById('deliveryType');
+  const deliveryType = deliveryTypeEl ? deliveryTypeEl.value : 'pickup';
   const deliveryFee = (deliveryType === 'delivery') ? 1.00 : 0.00;
   document.getElementById('totalsRow').innerHTML =
     `<div style="display:flex; justify-content:space-between"><div>Subtotal:</div><div>${formatMoney(subtotal)}</div></div>
@@ -532,7 +544,14 @@ function addFromDetail(){
   openCart();
 }
 
-/* confirm order */
+/* payment details toggle and confirm */
+function togglePaymentDetails(){
+  const pm = document.getElementById('paymentMethod');
+  const details = document.getElementById('paymentDetails');
+  if(!pm || !details) return;
+  details.style.display = (pm.value === 'card') ? 'block' : 'none';
+}
+
 function confirmOrder(){
   if(cart.length === 0){
     alert('El carrito está vacío.');
@@ -543,8 +562,21 @@ function confirmOrder(){
   const deliveryFee = (deliveryType === 'delivery') ? 1.00 : 0.00;
   const total = subtotal + deliveryFee;
   const paymentMethod = document.getElementById('paymentMethod').value;
+
+  if(paymentMethod === 'card'){
+    // Validación básica (UI only)
+    const name = document.getElementById('cardName').value.trim();
+    const number = document.getElementById('cardNumber').value.trim();
+    const exp = document.getElementById('cardExp').value.trim();
+    const cvc = document.getElementById('cardCVC').value.trim();
+    if(!name || !number || !exp || !cvc){
+      alert('Por favor complete los datos de la tarjeta para pagar con tarjeta.');
+      return;
+    }
+    // Nota: aquí NO se procesa ningún pago — esto solo simula la captura de datos.
+  }
+
   const orderNumber = Math.floor(100 + Math.random()*900);
-  // confirmation simple
   alert(`Pedido confirmado!\nOrden #${orderNumber}\nTotal: ${formatMoney(total)}\nMétodo: ${paymentMethod}\nGracias por su compra.`);
   // simulate clearing cart
   cart = [];
@@ -561,14 +593,20 @@ function scrollToMenu(){
 renderMenu();
 updateCart();
 
-/* update totals when delivery type changes (if cart open) */
+/* event listeners */
 document.addEventListener('change', function(e){
-  if(e.target && (e.target.id === 'deliveryType' || e.target.id === 'paymentMethod')){
+  if(e.target && e.target.id === 'paymentMethod'){
+    togglePaymentDetails();
+    updateCart();
+  }
+  if(e.target && e.target.id === 'deliveryType'){
     updateCart();
   }
 });
 </script>
 </body>
 </html>
+
+
 
 
