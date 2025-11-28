@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Panel de Pedidos - Sabor 503</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#f4f2ee;
+  margin:0;
+  padding:20px;
+}
+h1{
+  text-align:center;
+  margin-top:0;
+  font-size:28px;
+  color:#4E342E;
+}
+.order-card{
+  background:white;
+  padding:15px;
+  margin-bottom:15px;
+  border-radius:10px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+.order-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.order-id{
+  font-size:20px;
+  font-weight:bold;
+  color:#D35400;
+}
+.order-status{
+  padding:5px 10px;
+  border-radius:8px;
+  background:#eee;
+  font-size:14px;
+  cursor:pointer;
+}
+.order-status.ready{
+  background:#2ecc71;
+  color:white;
+}
+.items-table{
+  width:100%;
+  margin-top:10px;
+  border-collapse:collapse;
+}
+.items-table td, .items-table th{
+  border-bottom:1px solid #ddd;
+  padding:6px;
+}
+.footer{
+  margin-top:10px;
+  font-weight:bold;
+  text-align:right;
+  color:#4E342E;
+}
+.btn-clear{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  padding:12px 18px;
+  background:#c0392b;
+  color:white;
+  border:0;
+  border-radius:10px;
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<h1>Panel de Pedidos — Sabor 503</h1>
+
+<div id="ordersContainer"></div>
+
+<button class="btn-clear" onclick="clearOrders()">Limpiar pedidos</button>
+
+<script>
+// ==================== LEER PEDIDOS ====================
+function loadOrders(){
+  const orders = JSON.parse(localStorage.getItem('sabor503_orders')) || [];
+  const container = document.getElementById("ordersContainer");
+  container.innerHTML = "";
+
+  if(orders.length === 0){
+    container.innerHTML = "<p>No hay pedidos aún.</p>";
+    return;
+  }
+
+  orders.forEach((o, index)=>{
+    const div = document.createElement("div");
+    div.className = "order-card";
+
+    div.innerHTML = `
+      <div class="order-header">
+        <div class="order-id">Orden #${o.id}</div>
+        <div class="order-status" onclick="toggleStatus(this)">Pendiente</div>
+      </div>
+
+      <p><strong>Fecha:</strong> ${new Date(o.createdAt).toLocaleString()}</p>
+      <p><strong>Entrega:</strong> ${o.deliveryType === 'delivery' ? 'Domicilio' : 'Recoger'}</p>
+      <p><strong>Pago:</strong> ${o.paymentMethod}</p>
+
+      <table class="items-table">
+        <tr><th>Producto</th><th>Cant</th><th>Subtotal</th></tr>
+        ${o.items.map(i=>`
+          <tr>
+            <td>${i.name}<br><small>${i.options.join(", ")}</small></td>
+            <td>${i.qty}</td>
+            <td>$${(i.qty * i.price).toFixed(2)}</td>
+          </tr>
+        `).join("")}
+      </table>
+
+      <div class="footer">Total: $${o.totals.total.toFixed(2)}</div>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+// ==================== CAMBIO DE ESTADO ====================
+function toggleStatus(el){
+  if(el.classList.contains("ready")){
+    el.classList.remove("ready");
+    el.textContent = "Pendiente";
+  } else {
+    el.classList.add("ready");
+    el.textContent = "Listo";
+  }
+}
+
+// ==================== LIMPIAR PEDIDOS ====================
+function clearOrders(){
+  if(confirm("¿Deseas borrar todos los pedidos?")){
+    localStorage.removeItem("sabor503_orders");
+    loadOrders();
+  }
+}
+
+loadOrders();
+</script>
+
+</body>
+</html>
