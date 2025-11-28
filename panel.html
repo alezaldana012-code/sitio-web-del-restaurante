@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>Panel de Pedidos – DEMO</title>
+<title>Panel de Pedidos – Sabor 503</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -15,6 +15,8 @@ body{
 h1{
   text-align:center;
   color:#4E342E;
+  font-size:28px;
+  margin-top:0;
 }
 .order-card{
   background:white;
@@ -39,6 +41,7 @@ h1{
   background:#eee;
   font-size:14px;
   cursor:pointer;
+  user-select:none;
 }
 .order-status.ready{
   background:#2ecc71;
@@ -74,7 +77,7 @@ h1{
 
 <body>
 
-<h1>Panel de Pedidos – DEMO</h1>
+<h1>Panel de Pedidos – Sabor 503</h1>
 
 <div id="ordersContainer"></div>
 
@@ -84,7 +87,6 @@ h1{
 // ==========================
 // EJEMPLOS DE PEDIDOS (DEMO)
 // ==========================
-
 const exampleOrders = [
   {
     id: 101,
@@ -172,11 +174,13 @@ function toggleStatus(el){
   }
 }
 
-// Cargar al abrir
+// Cargar pedidos al abrir
 loadOrders();
 </script>
 
 </body>
 </html>
+
+
 
 
