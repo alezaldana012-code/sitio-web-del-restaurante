@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>Panel de Pedidos - Sabor 503</title>
+<title>Panel de Pedidos – DEMO</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -14,8 +14,6 @@ body{
 }
 h1{
   text-align:center;
-  margin-top:0;
-  font-size:28px;
   color:#4E342E;
 }
 .order-card{
@@ -51,22 +49,21 @@ h1{
   margin-top:10px;
   border-collapse:collapse;
 }
-.items-table td, .items-table th{
-  border-bottom:1px solid #ddd;
+.items-table th, .items-table td{
   padding:6px;
+  border-bottom:1px solid #ddd;
 }
 .footer{
   margin-top:10px;
   font-weight:bold;
   text-align:right;
-  color:#4E342E;
 }
-.btn-clear{
+.btn-reload{
   position:fixed;
   bottom:20px;
   right:20px;
-  padding:12px 18px;
-  background:#c0392b;
+  padding:10px 16px;
+  background:#2980b9;
   color:white;
   border:0;
   border-radius:10px;
@@ -74,27 +71,63 @@ h1{
 }
 </style>
 </head>
+
 <body>
 
-<h1>Panel de Pedidos — Sabor 503</h1>
+<h1>Panel de Pedidos – DEMO</h1>
 
 <div id="ordersContainer"></div>
 
-<button class="btn-clear" onclick="clearOrders()">Limpiar pedidos</button>
+<button class="btn-reload" onclick="loadOrders()">Recargar Ejemplos</button>
 
 <script>
-// ==================== LEER PEDIDOS ====================
+// ==========================
+// EJEMPLOS DE PEDIDOS (DEMO)
+// ==========================
+
+const exampleOrders = [
+  {
+    id: 101,
+    createdAt: "2025-01-22T11:15:00",
+    deliveryType: "pickup",
+    paymentMethod: "efectivo",
+    items: [
+      { name: "Carne Asada", qty: 2, price: 3.50, options: ["Sin cebolla"] },
+      { name: "Tacos", qty: 1, price: 4.00, options: ["Extra salsa"] }
+    ],
+    totals: { total: 11.00 }
+  },
+  {
+    id: 102,
+    createdAt: "2025-01-22T11:22:00",
+    deliveryType: "delivery",
+    paymentMethod: "tarjeta",
+    items: [
+      { name: "Pollo a la Plancha", qty: 1, price: 3.00, options: [] },
+      { name: "Nachos", qty: 1, price: 3.00, options: ["Queso extra"] }
+    ],
+    totals: { total: 7.00 }
+  },
+  {
+    id: 103,
+    createdAt: "2025-01-22T11:30:00",
+    deliveryType: "pickup",
+    paymentMethod: "transferencia",
+    items: [
+      { name: "Sopa de Gallina", qty: 1, price: 5.00, options: [] }
+    ],
+    totals: { total: 5.00 }
+  }
+];
+
+// ==========================
+// FUNCIÓN PARA MOSTRAR PEDIDOS
+// ==========================
 function loadOrders(){
-  const orders = JSON.parse(localStorage.getItem('sabor503_orders')) || [];
   const container = document.getElementById("ordersContainer");
   container.innerHTML = "";
 
-  if(orders.length === 0){
-    container.innerHTML = "<p>No hay pedidos aún.</p>";
-    return;
-  }
-
-  orders.forEach((o, index)=>{
+  exampleOrders.forEach(o=>{
     const div = document.createElement("div");
     div.className = "order-card";
 
@@ -126,7 +159,9 @@ function loadOrders(){
   });
 }
 
-// ==================== CAMBIO DE ESTADO ====================
+// ==========================
+// CAMBIAR ESTADO
+// ==========================
 function toggleStatus(el){
   if(el.classList.contains("ready")){
     el.classList.remove("ready");
@@ -137,16 +172,11 @@ function toggleStatus(el){
   }
 }
 
-// ==================== LIMPIAR PEDIDOS ====================
-function clearOrders(){
-  if(confirm("¿Deseas borrar todos los pedidos?")){
-    localStorage.removeItem("sabor503_orders");
-    loadOrders();
-  }
-}
-
+// Cargar al abrir
 loadOrders();
 </script>
 
 </body>
 </html>
+
+
